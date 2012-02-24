@@ -2,7 +2,9 @@
 virtstrap_system.runner
 -----------------------
 
-The system wide script runner
+The system wide script runner. The need for separation between the system wide
+runner and the project's local runner is to provide support for different
+python versions while still using all of the same code. 
 """
 import re
 import sys
@@ -59,9 +61,9 @@ def create_loader(args, project):
         project_collector])
 
 class VirtstrapSystemWideRunner(VirtstrapRunner):
-    def __init__(self, project_factory=None):
-        super(VirtstrapSystemWideRunner, self).__init__(
-                loader_factory=create_loader)
+    def __init__(self, project_factory=None, **kwargs):
+        kwargs['loader_factory'] = create_loader
+        super(VirtstrapSystemWideRunner, self).__init__(**kwargs)
         self._project = NONE_OBJ
         self._project_factory = project_factory or ProjectFactory()
 

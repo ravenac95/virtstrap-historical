@@ -22,7 +22,14 @@ class InitializeCommand(commands.ProjectCommand):
     parser = parser
     description = 'Bootstraps a virtstrap virtual environment'
 
-    def run(self, project, options, raw_args=None, **kwargs):
+    def run(self, project, options, raw_args=None, use_injected_project=False, 
+            **kwargs):
+        # FIXME the init command automatically reloads the project settings
+        # because it is the only command that can take the project directory name
+        # as a positional argument
+        if not use_injected_project:
+            project = self.load_project(options)
+        self.project = project
         self.ensure_project_directory(project)
         self.create_virtualenv(project)
         self.wrap_activate_script(project)

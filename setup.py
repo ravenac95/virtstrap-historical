@@ -21,5 +21,9 @@ setup(name='virtstrap',
         'virtualenv',
         'virtstrap-core',
     ],
-    entry_points={},
+    entry_points={
+        'console_scripts': [
+            'vstrap = virtstrap_system.runner:main',
+        ]
+    },
 )

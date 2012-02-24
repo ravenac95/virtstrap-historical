@@ -10,6 +10,7 @@ import shutil
 from argparse import ArgumentParser
 from virtstrap import commands
 from virtstrap import constants
+from virtstrap.options import global_options_to_args
 from virtstrap_system.loaders import call_project_command
 
 parser = ArgumentParser()
@@ -34,7 +35,7 @@ class InitializeCommand(commands.ProjectCommand):
         self.create_virtualenv(project)
         self.wrap_activate_script(project)
         self.create_quick_activate_script(project)
-        self.run_install_for_project(project, raw_args)
+        self.run_install_for_project(project, options)
 
     def ensure_project_directory(self, project):
         project_dir = project.path()
@@ -116,6 +117,7 @@ class InitializeCommand(commands.ProjectCommand):
         quick_activate.write(quick_activate_script)
         quick_activate.close()
 
-    def run_install_for_project(self, project, command_args):
+    def run_install_for_project(self, project, options):
         self.logger.debug('Running install command for project')
-        call_project_command(project, 'install', command_args)
+        args = global_options_to_args(options)
+        call_project_command(project, 'install', args)

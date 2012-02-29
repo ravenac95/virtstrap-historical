@@ -95,3 +95,10 @@ Any other location can be specified, but that is extremely discouraged.
 At the moment the file is a YAML file. Eventually I hope to move away from
 yaml as its syntax can get in the way of defining requirements and
 the general environment.
+
+Links
+-----
+
+* Website Coming Soon!
+* `development version 
+  <http://github.com/ravenac95/virtstrap/zipball/develop#egg=virtstrap-dev>`_

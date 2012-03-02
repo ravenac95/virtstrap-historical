@@ -10,7 +10,7 @@ import shutil
 from argparse import ArgumentParser
 from virtstrap import commands
 from virtstrap import constants
-from virtstrap.options import global_options_to_args
+from virtstrap.options import base_options_to_args
 from virtstrap_system.loaders import call_project_command
 
 parser = ArgumentParser()
@@ -119,5 +119,5 @@ class InitializeCommand(commands.ProjectCommand):
 
     def run_install_for_project(self, project, options):
         self.logger.debug('Running install command for project')
-        args = global_options_to_args(options)
+        args = base_options_to_args(options)
         call_project_command(project, 'install', args)

@@ -16,6 +16,7 @@ from virtstrap_system.loaders import ProjectCommandCollector
 from virtstrap.runner import VirtstrapRunner
 from virtstrap import commands
 from virtstrap import constants
+from virtstrap.log import logger
 from virtstrap.registry import CommandDoesNotExist
 
 VS_DIR_OPTION = '--virtstrap-dir'
@@ -69,6 +70,8 @@ class VirtstrapSystemWideRunner(VirtstrapRunner):
 
     def main(self, args=None):
         """Handles execution through command line interface"""
+        # This is so you can see virtstrap starting in the log file
+        logger.debug('------------------- vstrap starting -------------------')
         # Load all of the available commands
         if not args:
             args = sys.argv[1:]
@@ -90,6 +93,12 @@ class VirtstrapSystemWideRunner(VirtstrapRunner):
             logger.debug('Unknown command "%s"' % command)
             parser.error('"%s" is not a vstrap command. (use "vstrap help" '
                     'to see a list of commands)' % command)
+        except SystemExit, e:
+            if e.code == 0:
+                exit_code = EXIT_OK
+            else:
+                logger.error("virtstrap did not finish it's"
+                        " task correctly check the log. for more information")
         finally:
             self.close_context()
         if exit_code == EXIT_OK:

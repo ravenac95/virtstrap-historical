@@ -1,15 +1,26 @@
+import sys
 import json
 from virtstrap.loaders import Collector
 from virtstrap import commands
 from virtstrap import constants
 from virtstrap.log import logger
 
-def call_project_command(project, command_name, command_args, 
+def call_project_command(project, command_name, command_args, output_errors=False,
         **subprocess_options):
     virtstrap_bin = constants.PROJECT_VIRTSTRAP_BIN_NAME
-    command = [command_name]
-    command.extend(command_args)
-    return project.call_bin(virtstrap_bin, command, **subprocess_options)
+    args = [command_name]
+    args.extend(command_args)
+    try:
+        return_data = project.call_bin(virtstrap_bin, args,
+                **subprocess_options)
+    except OSError:
+        logger.debug('Error executing virtstrap local command')
+        command_bin_path = project.bin_path(virtstrap_bin)
+        command_list = [command_bin_path]
+        command_list.extend(args)
+        command_string = ' '.join(command_list)
+        logger.debug('Command called: %s' % command_string)
+        sys.exit(2)
 
 class WrappedProjectCommand(commands.Command):
     """A special command that wraps a project command"""
